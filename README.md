@@ -1,12 +1,13 @@
-# Gemini LangGraph Chat App
+# Gemini LangGraph Project
 
-This project demonstrates a simple interactive chat application using Google's Gemini model and LangGraph. It fetches Gemini account details and allows users to chat with the AI in a conversational loop.
+This project contains two interactive chat applications built using Google's Gemini model and LangGraph:
 
-## Features
-- Fetches and displays Gemini account information (available models, current model details).
-- Interactive chat interface where users can send messages and receive responses from Gemini.
-- Simple command-line UI for user interaction.
-- Built using LangGraph for workflow management.
+1. **Simple Chat App:** A basic chat application that allows users to interact with the Gemini model.
+2. **E-commerce Chatbot:** A chatbot that helps users browse shoes and place orders.
+
+## Project Structure
+- `simple_chat_bot/`: Contains the simple chat app and its documentation.
+- `ecommerce_bot/`: Contains the e-commerce chatbot and its documentation.
 
 ## Setup
 1. Clone the repository.
@@ -18,14 +19,10 @@ This project demonstrates a simple interactive chat application using Google's G
    ```
    GOOGLE_API_KEY=your_api_key_here
    ```
-4. Run the chat app:
-   ```
-   python3 chat_app.py
-   ```
 
 ## Usage
-- Start the app and follow the prompts to chat with Gemini.
-- Type `exit` or `quit` to end the chat session.
+- For the Simple Chat App, navigate to the `simple_chat_bot` directory and follow the instructions in its README.
+- For the E-commerce Chatbot, navigate to the `ecommerce_bot` directory and follow the instructions in its README.
 
 ## Dependencies
 - langgraph
