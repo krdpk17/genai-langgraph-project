@@ -5,6 +5,7 @@ This project demonstrates a simple interactive chat application using Google's G
 ## Features
 - Fetches and displays Gemini account information (available models, current model details).
 - Interactive chat interface where users can send messages and receive responses from Gemini.
+- Simple command-line UI for user interaction.
 - Built using LangGraph for workflow management.
 
 ## Setup
