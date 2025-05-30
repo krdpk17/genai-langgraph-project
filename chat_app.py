@@ -98,7 +98,9 @@ if __name__ == "__main__":
         print(f"{key}: {value}")
     print("------------------------\n")
 
-    print("Welcome to the Gemini Chat App! Type 'exit' or 'quit' to end the chat.\n")
+    print("Welcome to the Gemini Chat App!")
+    print("Type your message and press Enter to chat with Gemini.")
+    print("Type 'exit' or 'quit' to end the chat.\n")
     messages = []
     while True:
         user_input = input("You: ")
