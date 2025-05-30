@@ -4,20 +4,48 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage
 import os
 from dotenv import load_dotenv
+import google.generativeai as genai
 
 # Load environment variables
 load_dotenv()
+
+# Configure Gemini API
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 # Define the state
 class State(TypedDict):
     messages: list[HumanMessage]
     current_step: str
+    account_info: dict
+
+def get_account_info() -> dict:
+    """Fetch Gemini account information."""
+    try:
+        # Get model information
+        models = genai.list_models()
+        available_models = [model.name for model in models]
+        
+        # Get current model details
+        current_model = genai.get_model("gemini-2.0-flash")
+        
+        return {
+            "available_models": available_models,
+            "current_model": current_model.name,
+            "model_description": current_model.description,
+            "model_generation_config": current_model.supported_generation_methods
+        }
+    except Exception as e:
+        return {"error": str(e)}
 
 # Define the nodes
 def process_input(state: State) -> State:
     """Process the initial input."""
     print("Processing input...")
-    return {"messages": state["messages"], "current_step": "processed"}
+    return {
+        "messages": state["messages"],
+        "current_step": "processed",
+        "account_info": state.get("account_info", {})
+    }
 
 def generate_response(state: State) -> State:
     """Generate a response using the LLM."""
@@ -25,7 +53,11 @@ def generate_response(state: State) -> State:
     llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash")
     response = llm.invoke(state["messages"])
     state["messages"].append(response)
-    return {"messages": state["messages"], "current_step": "completed"}
+    return {
+        "messages": state["messages"],
+        "current_step": "completed",
+        "account_info": state.get("account_info", {})
+    }
 
 def should_end(state: State) -> str:
     """Determine if we should end the graph."""
@@ -58,15 +90,26 @@ app = workflow.compile()
 
 # Run the graph
 if __name__ == "__main__":
+    # Get account information
+    account_info = get_account_info()
+    print("\nGemini Account Information:")
+    print("------------------------")
+    for key, value in account_info.items():
+        print(f"{key}: {value}")
+    print("------------------------\n")
+    
     # Initialize the state
     initial_state = {
         "messages": [HumanMessage(content="Hello, World!")],
-        "current_step": "start"
+        "current_step": "start",
+        "account_info": account_info
     }
     
     # Run the graph
     result = app.invoke(initial_state)
     
     # Print the final messages
+    print("\nConversation:")
+    print("------------")
     for message in result["messages"]:
         print(f"{message.type}: {message.content}") 
