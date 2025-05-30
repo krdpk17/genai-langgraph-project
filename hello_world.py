@@ -97,19 +97,24 @@ if __name__ == "__main__":
     for key, value in account_info.items():
         print(f"{key}: {value}")
     print("------------------------\n")
-    
-    # Initialize the state
-    initial_state = {
-        "messages": [HumanMessage(content="Hello, World!")],
-        "current_step": "start",
-        "account_info": account_info
-    }
-    
-    # Run the graph
-    result = app.invoke(initial_state)
-    
-    # Print the final messages
-    print("\nConversation:")
-    print("------------")
-    for message in result["messages"]:
-        print(f"{message.type}: {message.content}") 
+
+    print("Welcome to the Gemini Chat App! Type 'exit' or 'quit' to end the chat.\n")
+    messages = []
+    while True:
+        user_input = input("You: ")
+        if user_input.strip().lower() in ["exit", "quit"]:
+            print("Goodbye!")
+            break
+        messages.append(HumanMessage(content=user_input))
+        state = {
+            "messages": messages.copy(),
+            "current_step": "start",
+            "account_info": account_info
+        }
+        result = app.invoke(state)
+        # Find the latest AI message
+        ai_message = next((m for m in result["messages"][::-1] if m.type == "ai"), None)
+        if ai_message:
+            print(f"Gemini: {ai_message.content}\n")
+        else:
+            print("Gemini: (No response)\n") 
